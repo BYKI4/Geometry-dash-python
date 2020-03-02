@@ -25,7 +25,8 @@ holding1 = False
 holding2 = False
 SCORE = 0
 score_inc = 30
-pygame.time.set_timer(score_inc, 100)
+gen = 31
+bgen = False
 
 
 class Game:
@@ -229,7 +230,7 @@ class Game:
                 self.rect.left += speed
 
     def main(self):
-        global size, access, k, b, width, holding1, holding2, height, all_sprites, spikes, clock, speed, SCORE
+        global size, access, k, b, width, holding1, holding2, height, all_sprites, spikes, clock, speed, SCORE, bgen
         pygame.mixer.init()
         self.running = True
         pygame.mixer.music.load(os.path.join('data', "Stay_Inside_Me_Official.ogg"))
@@ -242,19 +243,15 @@ class Game:
         self.player = self.Cube(0, 470, img=trf)
         self.ground = self.Ground(-15, 500)
         pygame.mixer.music.play(-1)
-        self.temp = list(range(1, 101))
+        self.temp = list(range(1, 4))
         self.fire1 = self.load_image(os.path.join('data', 'star.png'))
         self.camera = self.Camera()
         self.score = self.Score()
         all_sprites.add(self.score)
         pygame.time.set_timer(score_inc, 100)
+        pygame.time.set_timer(gen, 3000)
         while self.running:
             self.player.jump()
-            if choice(self.temp) == 1:
-                # Block(player.rect.x + player.rect.w * 20, ground.rect.y - block.rect.h)
-                self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40, self.ground.rect.y - 30)
-                self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40 + 30, self.ground.rect.y - 30)
-                self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40 + 60, self.ground.rect.y - 30)
             if self.player.rect.x + self.player.rect.w // 2 >= 265:
                 access = True
                 self.camera.update(self.player)
@@ -264,6 +261,20 @@ class Game:
                     self.running = False
                 if event.type == score_inc:
                     SCORE += 1
+                if event.type == gen:
+                    bgen = True
+                if bgen and random.choice(self.temp) == 1:
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40, self.ground.rect.y - 30)
+                    bgen = False
+                elif bgen and random.choice(self.temp) == 2:
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40, self.ground.rect.y - 30)
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40 + 30, self.ground.rect.y - 30)
+                    bgen = False
+                elif bgen and random.choice(self.temp) == 3:
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40, self.ground.rect.y - 30)
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40 + 30, self.ground.rect.y - 30)
+                    self.Spike(self.player.rect.x + self.player.rect.w * 20 + 40 + 60, self.ground.rect.y - 30)
+                    bgen = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     holding1 = True
                 elif event.type == pygame.KEYUP:
