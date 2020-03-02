@@ -11,7 +11,6 @@ gravity = 10
 speed = 7
 spikes = pygame.sprite.Group()
 size = width, height = 900, 750
-running = True
 k = 0
 b = False
 clock = pygame.time.Clock()
@@ -230,8 +229,9 @@ class Game:
                 self.rect.left += speed
 
     def main(self):
-        global size, access, running, k, b, width, holding1, holding2, height, all_sprites, spikes, clock, speed, SCORE
+        global size, access, k, b, width, holding1, holding2, height, all_sprites, spikes, clock, speed, SCORE
         pygame.mixer.init()
+        self.running = True
         pygame.mixer.music.load(os.path.join('data', "Stay_Inside_Me_Official.ogg"))
         self.screen = pygame.display.set_mode(size)
         self.screen2 = pygame.Surface(size)
@@ -245,9 +245,8 @@ class Game:
         self.temp = list(range(1, 101))
         self.fire1 = self.load_image(os.path.join('data', 'star.png'))
         self.camera = self.Camera()
-        print(running)
         all_sprites.add(self.Score())
-        while running:
+        while self.running:
             self.player.jump()
             if choice(self.temp) == 1:
                 # Block(player.rect.x + player.rect.w * 20, ground.rect.y - block.rect.h)
@@ -260,7 +259,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.mixer.music.stop()
-                    running = False
+                    self.running = False
                 if event.type == score_inc:
                     SCORE += 1
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -297,7 +296,16 @@ class Game:
                     all_sprites.draw(self.screen2)
                     all_sprites.update()
                     self.screen.blit(self.screen2, self.screen2.get_rect())
-                running = False
+                self.running = False
             pygame.display.flip()
+        start = True
+        access = False
+        processing = False
+        holding1 = False
+        holding2 = False
+        b = False
+        k = 0
+        n_y = 0
+        SCORE = 0
+        speed = 7
         pygame.quit()
-        running = True
