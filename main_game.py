@@ -27,7 +27,8 @@ class Intro(QMainWindow, Ui_Form):
         self.show()
 
     def info(self):
-        ok = QMessageBox.information(self, "Управление", "Управление двумя кнопками: пробелом или левой кнопкой мыши")
+        ok = QMessageBox.information(self, "Управление", "Управление двумя кнопками: пробелом или левой кнопкой мыши.\n"
+                                                         "Можно зажать любую из кнопок.")
         if ok:
             pass
 
