@@ -24,7 +24,7 @@ processing = False
 holding1 = False
 holding2 = False
 SCORE = 0
-score_inc = 1
+score_inc = 30
 pygame.time.set_timer(score_inc, 100)
 
 
@@ -245,7 +245,9 @@ class Game:
         self.temp = list(range(1, 101))
         self.fire1 = self.load_image(os.path.join('data', 'star.png'))
         self.camera = self.Camera()
-        all_sprites.add(self.Score())
+        self.score = self.Score()
+        all_sprites.add(self.score)
+        pygame.time.set_timer(score_inc, 100)
         while self.running:
             self.player.jump()
             if choice(self.temp) == 1:
@@ -308,4 +310,9 @@ class Game:
         n_y = 0
         SCORE = 0
         speed = 7
+        self.player.image = self.player.next_im[0]
+        all_sprites = pygame.sprite.Group()
+        spikes = pygame.sprite.Group()
+        all_sprites.draw(self.screen2)
+        self.screen.blit(self.screen2, self.screen2.get_rect())
         pygame.quit()
